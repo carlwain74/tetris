@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris Game</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header -->
+        <header class="game-header">
+            <h1>TETRIS</h1>
+        </header>
+
+        <!-- Main Game Area -->
+        <div class="game-main">
+            <!-- Left Panel: Hold & Stats -->
+            <div class="left-panel">
+                <div class="hold-container panel">
+                    <h3>HOLD</h3>
+                    <canvas id="holdCanvas" width="120" height="120"></canvas>
+                </div>
+                
+                <div class="stats-container panel">
+                    <div class="stat">
+                        <label>SCORE</label>
+                        <div id="score" class="stat-value">0</div>
+                    </div>
+                    <div class="stat">
+                        <label>LEVEL</label>
+                        <div id="level" class="stat-value">1</div>
+                    </div>
+                    <div class="stat">
+                        <label>LINES</label>
+                        <div id="lines" class="stat-value">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center: Game Board -->
+            <div class="board-container">
+                <canvas id="gameCanvas" width="300" height="600"></canvas>
+                
+                <!-- Overlays -->
+                <div id="startScreen" class="overlay">
+                    <div class="overlay-content">
+                        <h2>TETRIS</h2>
+                        <p class="high-score">High Score: <span id="highScore">0</span></p>
+                        <p class="instruction">Press any key to start</p>
+                        <div class="controls-info">
+                            <p><strong>Controls:</strong></p>
+                            <p>← → Move | ↑ Rotate | ↓ Soft Drop</p>
+                            <p>Space: Hard Drop | C: Hold | P: Pause</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="pauseScreen" class="overlay hidden">
+                    <div class="overlay-content">
+                        <h2>PAUSED</h2>
+                        <p class="instruction">Press P to resume</p>
+                    </div>
+                </div>
+                
+                <div id="gameOverScreen" class="overlay hidden">
+                    <div class="overlay-content">
+                        <h2>GAME OVER</h2>
+                        <p class="final-score">Score: <span id="finalScore">0</span></p>
+                        <p class="high-score-notice hidden">New High Score!</p>
+                        <p class="instruction">Press R to restart</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Next Pieces -->
+            <div class="right-panel">
+                <div class="next-container panel">
+                    <h3>NEXT</h3>
+                    <canvas id="next1Canvas" width="120" height="120"></canvas>
+                    <canvas id="next2Canvas" width="120" height="120"></canvas>
+                    <canvas id="next3Canvas" width="120" height="120"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Modules -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

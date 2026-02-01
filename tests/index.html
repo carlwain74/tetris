@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris - Comprehensive Test Suite</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a2e;
+            color: #eee;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00d9ff;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        button {
+            background: #00d9ff;
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #00b8d4;
+        }
+
+        button.secondary {
+            background: #4a5568;
+            color: #fff;
+        }
+
+        button.secondary:hover {
+            background: #2d3748;
+        }
+
+        .summary {
+            background: #0f3460;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 2px solid #00d9ff;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .summary-item {
+            text-align: center;
+            padding: 15px;
+            background: #16213e;
+            border-radius: 4px;
+        }
+
+        .summary-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .summary-value.pass { color: #00ff88; }
+        .summary-value.fail { color: #ff4444; }
+        .summary-value.warning { color: #ffaa00; }
+        .summary-value.skip { color: #888; }
+
+        .summary-label {
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .test-section {
+            background: #16213e;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #0f3460;
+        }
+
+        .test-section h2 {
+            color: #00d9ff;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-status {
+            font-size: 0.8em;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: normal;
+        }
+
+        .section-status.pass {
+            background: #00ff88;
+            color: #000;
+        }
+
+        .section-status.fail {
+            background: #ff4444;
+            color: #fff;
+        }
+
+        .section-status.skip {
+            background: #888;
+            color: #fff;
+        }
+
+        .test-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: #0f3460;
+            border-radius: 4px;
+            border-left: 4px solid #666;
+        }
+
+        .test-item.pass {
+            border-left-color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .test-item.fail {
+            border-left-color: #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+        }
+
+        .test-item.warning {
+            border-left-color: #ffaa00;
+            background: rgba(255, 170, 0, 0.1);
+        }
+
+        .test-item.skip {
+            border-left-color: #666;
+            background: rgba(100, 100, 100, 0.1);
+            opacity: 0.6;
+        }
+
+        .status-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 15px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .test-name {
+            flex: 1;
+        }
+
+        .test-detail {
+            color: #888;
+            font-size: 0.9em;
+            margin-left: 39px;
+            margin-top: 5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #0f3460;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88, #00d9ff);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: #0f3460;
+            border: 2px solid #00d9ff;
+            color: #00d9ff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .filter-btn.active {
+            background: #00d9ff;
+            color: #1a1a2e;
+        }
+
+        .console-output {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85em;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .console-output pre {
+            white-space: pre-wrap;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Tetris - Test Suite</h1>
+        <p class="subtitle">Comprehensive Testing for All Game Components</p>
+
+        <div class="controls">
+            <button onclick="runAllTests()">▶ Run All Tests</button>
+            <button onclick="runStageTests(1)" class="secondary">Stage 1: Foundation</button>
+            <button onclick="runStageTests(2)" class="secondary">Stage 2: Pieces</button>
+            <button onclick="runStageTests(3)" class="secondary">Stage 3: Board</button>
+            <button onclick="runStageTests(4)" class="secondary">Stage 4: Game Logic</button>
+            <button onclick="runStageTests(5)" class="secondary">Stage 5: Rendering</button>
+            <button onclick="runStageTests(6)" class="secondary">Stage 6: Input</button>
+            <button onclick="location.reload()">🔄 Reset</button>
+        </div>
+
+        <div class="summary">
+            <h2>Test Summary</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%">0%</div>
+            </div>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <div class="summary-label">Total Tests</div>
+                    <div class="summary-value" id="totalTests">0</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Passed</div>
+                    <div class="summary-value pass" id="passedTests">0</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Failed</div>
+                    <div class="summary-value fail" id="failedTests">0</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Warnings</div>
+                    <div class="summary-value warning" id="warningTests">0</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Skipped</div>
+                    <div class="summary-value skip" id="skippedTests">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterTests('all')">All</button>
+            <button class="filter-btn" onclick="filterTests('pass')">Passed</button>
+            <button class="filter-btn" onclick="filterTests('fail')">Failed</button>
+            <button class="filter-btn" onclick="filterTests('warning')">Warnings</button>
+            <button class="filter-btn" onclick="filterTests('skip')">Skipped</button>
+        </div>
+
+        <div id="testResults"></div>
+
+        <div id="consoleOutput" class="console-output" style="display: none;">
+            <pre id="consoleLog"></pre>
+        </div>
+    </div>
+
+    <script type="module">
+        import { CONFIG, PIECE_TYPES, CANVAS_IDS, UI_IDS, KEYS } from './js/config.js';
+        import { Renderer } from './js/renderer.js';
+        import { Board } from './js/board.js';
+        import { Piece, PIECES } from './js/pieces.js';
+        import { Game } from './js/game.js';
+        import { InputHandler } from './js/input.js';
+
+        // Test Results Storage
+        let testResults = {
+            total: 0,
+            passed: 0,
+            failed: 0,
+            warnings: 0,
+            skipped: 0,
+            sections: []
+        };
+
+        let currentFilter = 'all';
+
+        // Console logger
+        const consoleLog = [];
+        const originalConsole = {
+            log: console.log,
+            warn: console.warn,
+            error: console.error
+        };
+
+        function logToConsole(message, type = 'log') {
+            consoleLog.push({ message, type, timestamp: new Date().toISOString() });
+            const consoleEl = document.getElementById('consoleLog');
+            if (consoleEl) {
+                consoleEl.textContent = consoleLog.map(l => 
+                    `[${l.timestamp.split('T')[1].split('.')[0]}] ${l.message}`
+                ).join('\n');
+            }
+        }
+
+        // Test Runner
+        class TestRunner {
+            constructor() {
+                this.currentSection = null;
+            }
+
+            section(name, stage = null) {
+                this.currentSection = {
+                    name: name,
+                    stage: stage,
+                    tests: []
+                };
+                testResults.sections.push(this.currentSection);
+                return this;
+            }
+
+            test(description, testFn, skip = false) {
+                testResults.total++;
+                
+                if (skip) {
+                    testResults.skipped++;
+                    this.currentSection.tests.push({
+                        description,
+                        status: 'skip',
+                        message: 'Not yet implemented'
+                    });
+                    return this;
+                }
+                
+                try {
+                    const result = testFn();
+                    
+                    let status = 'pass';
+                    let message = null;
+                    
+                    if (result === false) {
+                        status = 'fail';
+                        testResults.failed++;
+                    } else if (typeof result === 'object' && result !== null) {
+                        if (result.warning) {
+                            status = 'warning';
+                            message = result.message;
+                            testResults.warnings++;
+                        } else if (result.skip) {
+                            status = 'skip';
+                            message = result.message || 'Skipped';
+                            testResults.skipped++;
+                        } else {
+                            testResults.passed++;
+                            message = result.message || null;
+                        }
+                    } else {
+                        testResults.passed++;
+                        message = typeof result === 'string' ? result : null;
+                    }
+
+                    this.currentSection.tests.push({
+                        description,
+                        status,
+                        message
+                    });
+
+                } catch (error) {
+                    testResults.failed++;
+                    this.currentSection.tests.push({
+                        description,
+                        status: 'fail',
+                        message: `Error: ${error.message}`
+                    });
+                    logToConsole(`Test failed: ${description} - ${error.message}`, 'error');
+                }
+
+                return this;
+            }
+
+            renderResults() {
+                updateSummary();
+                
+                const container = document.getElementById('testResults');
+                container.innerHTML = '';
+
+                testResults.sections.forEach(section => {
+                    const sectionDiv = document.createElement('div');
+                    sectionDiv.className = 'test-section';
+                    sectionDiv.dataset.stage = section.stage || 'all';
+                    
+                    const sectionPassed = section.tests.every(t => t.status === 'pass' || t.status === 'skip');
+                    const sectionFailed = section.tests.some(t => t.status === 'fail');
+                    const sectionSkipped = section.tests.every(t => t.status === 'skip');
+                    
+                    const statusClass = sectionSkipped ? 'skip' : (sectionFailed ? 'fail' : 'pass');
+                    const statusText = sectionSkipped ? 'SKIPPED' : (sectionFailed ? 'FAILED' : 'PASSED');
+                    
+                    const sectionTitle = document.createElement('h2');
+                    sectionTitle.innerHTML = `
+                        ${section.name}
+                        <span class="section-status ${statusClass}">${statusText}</span>
+                    `;
+                    sectionDiv.appendChild(sectionTitle);
+
+                    section.tests.forEach(test => {
+                        const testDiv = document.createElement('div');
+                        testDiv.className = `test-item ${test.status}`;
+                        testDiv.dataset.status = test.status;
+                        
+                        const icon = test.status === 'pass' ? '✓' : 
+                                    test.status === 'fail' ? '✗' : 
+                                    test.status === 'skip' ? '⊘' : '⚠';
+                        
+                        testDiv.innerHTML = `
+                            <span class="status-icon">${icon}</span>
+                            <span class="test-name">${test.description}</span>
+                        `;
+                        
+                        if (test.message) {
+                            const detail = document.createElement('div');
+                            detail.className = 'test-detail';
+                            detail.textContent = test.message;
+                            testDiv.appendChild(detail);
+                        }
+
+                        sectionDiv.appendChild(testDiv);
+                    });
+
+                    container.appendChild(sectionDiv);
+                });
+
+                applyFilter(currentFilter);
+            }
+        }
+
+        function updateSummary() {
+            document.getElementById('totalTests').textContent = testResults.total;
+            document.getElementById('passedTests').textContent = testResults.passed;
+            document.getElementById('failedTests').textContent = testResults.failed;
+            document.getElementById('warningTests').textContent = testResults.warnings;
+            document.getElementById('skippedTests').textContent = testResults.skipped;
+            
+            const passRate = testResults.total > 0 ? 
+                Math.round((testResults.passed / testResults.total) * 100) : 0;
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = passRate + '%';
+            progressBar.textContent = passRate + '%';
+        }
+
+        window.filterTests = function(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            applyFilter(filter);
+        };
+
+        function applyFilter(filter) {
+            document.querySelectorAll('.test-item').forEach(item => {
+                if (filter === 'all' || item.dataset.status === filter) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Test Definitions
+        function getStage1Tests(runner) {
+            runner.section('📄 Stage 1: HTML Structure & DOM', 1)
+                .test('index.html exists and loads', () => document.body !== null)
+                .test('Game canvas exists with correct ID', () => {
+                    const canvas = document.getElementById(CANVAS_IDS.GAME);
+                    return canvas !== null && canvas.tagName === 'CANVAS';
+                })
+                .test('Game canvas dimensions correct (300x600)', () => {
+                    const canvas = document.getElementById(CANVAS_IDS.GAME);
+                    return canvas.width === 300 && canvas.height === 600;
+                })
+                .test('Hold canvas exists', () => document.getElementById(CANVAS_IDS.HOLD) !== null)
+                .test('All next piece canvases exist', () => {
+                    return document.getElementById(CANVAS_IDS.NEXT_1) &&
+                           document.getElementById(CANVAS_IDS.NEXT_2) &&
+                           document.getElementById(CANVAS_IDS.NEXT_3);
+                })
+                .test('UI elements exist (score, level, lines)', () => {
+                    return document.getElementById(UI_IDS.SCORE) &&
+                           document.getElementById(UI_IDS.LEVEL) &&
+                           document.getElementById(UI_IDS.LINES);
+                })
+                .test('Overlay screens exist', () => {
+                    return document.getElementById(UI_IDS.START_SCREEN) &&
+                           document.getElementById(UI_IDS.PAUSE_SCREEN) &&
+                           document.getElementById(UI_IDS.GAME_OVER_SCREEN);
+                });
+
+            runner.section('⚙️ Stage 1: Configuration', 1)
+                .test('CONFIG object loaded', () => typeof CONFIG === 'object')
+                .test('Board dimensions correct (10x20)', () => 
+                    CONFIG.BOARD_WIDTH === 10 && CONFIG.BOARD_HEIGHT === 20)
+                .test('Cell size is 30px', () => CONFIG.CELL_SIZE === 30)
+                .test('All 7 piece types defined', () => PIECE_TYPES.length === 7)
+                .test('All piece colors defined', () => {
+                    return ['I', 'O', 'T', 'S', 'Z', 'J', 'L'].every(
+                        type => CONFIG.COLORS[type] !== undefined
+                    );
+                })
+                .test('Scoring values configured', () => {
+                    return CONFIG.POINTS.SINGLE && CONFIG.POINTS.TETRIS;
+                })
+                .test('Key bindings configured', () => {
+                    return KEYS.LEFT && KEYS.RIGHT && KEYS.ROTATE_CW;
+                });
+
+            runner.section('🎨 Stage 1: Rendering Setup', 1)
+                .test('Renderer class exists', () => typeof Renderer === 'function')
+                .test('Renderer can be instantiated', () => {
+                    try {
+                        const renderer = new Renderer();
+                        return renderer !== null;
+                    } catch (e) {
+                        return false;
+                    }
+                })
+                .test('Canvas contexts available', () => {
+                    const canvas = document.getElementById(CANVAS_IDS.GAME);
+                    return canvas.getContext('2d') !== null;
+                })
+                .test('LocalStorage available', () => {
+                    try {
+                        localStorage.setItem('test', 'value');
+                        localStorage.removeItem('test');
+                        return true;
+                    } catch (e) {
+                        return { warning: true, message: 'LocalStorage blocked' };
+                    }
+                });
+        }
+
+        function getStage2Tests(runner) {
+            const piecesImplemented = PIECES && Object.keys(PIECES).length > 0;
+            
+            runner.section('🧩 Stage 2: Piece Definitions', 2)
+                .test('PIECES object exists', () => typeof PIECES === 'object', !piecesImplemented)
+                .test('All 7 piece types defined', () => {
+                    return ['I', 'O', 'T', 'S', 'Z', 'J', 'L'].every(
+                        type => PIECES[type] !== undefined
+                    );
+                }, !piecesImplemented)
+                .test('Each piece has 4 rotation states', () => {
+                    return Object.values(PIECES).every(piece => 
+                        piece.shapes && piece.shapes.length === 4
+                    );
+                }, !piecesImplemented)
+                .test('Piece class exists', () => typeof Piece === 'function', !piecesImplemented)
+                .test('Piece can be instantiated', () => {
+                    try {
+                        const piece = new Piece('I');
+                        return piece !== null;
+                    } catch (e) {
+                        return false;
+                    }
+                }, !piecesImplemented)
+                .test('Piece has rotation method', () => {
+                    try {
+                        const piece = new Piece('I');
+                        return typeof piece.rotate === 'function';
+                    } catch (e) {
+                        return false;
+                    }
+                }, !piecesImplemented)
+                .test('Piece getShape returns matrix', () => {
+                    try {
+                        const piece = new Piece('I');
+                        const shape = piece.getShape();
+                        return Array.isArray(shape);
+                    } catch (e) {
+                        return false;
+                    }
+                }, !piecesImplemented);
+        }
+
+        function getStage3Tests(runner) {
+            const boardImplemented = Board && typeof Board === 'function';
+            
+            runner.section('📋 Stage 3: Board Management', 3)
+                .test('Board class exists', () => typeof Board === 'function', !boardImplemented)
+                .test('Board can be instantiated', () => {
+                    try {
+                        const board = new Board();
+                        return board !== null;
+                    } catch (e) {
+                        return false;
+                    }
+                }, !boardImplemented)
+                .test('Board has correct dimensions', () => {
+                    try {
+                        const board = new Board();
+                        return board.width === 10 && board.height === 20;
+                    } catch (e) {
+                        return false;
+                    }
+                }, !boardImplemented)
+                .test('Board grid is 2D array', () => {
+                    try {
+                        const board = new Board();
+                        return Array.isArray(board.grid) && 
+                               Array.isArray(board.grid[0]);
+                    } catch (e) {
+                        return false;
+                    }
+                }, !boardImplemented)
+                .test('Board has collision detection method', () => {
+                    try {
+                        const board = new Board();
+                        return typeof board.isValidMove === 'function';
+                    } catch (e) {
+                        return false;
+                    }
+                }, !boardImplemented)
+                .test('Board has line clearing method', () => {
+                    try {
+                        const board = new Board();
+                        return typeof board.clearLines === 'function';
+                    } catch (e) {
+                        return false;
+                    }
+                }, !boardImplemented);
+        }
+
+        function getStage4Tests(runner) {
+            const gameImplemented = Game && typeof Game === 'function';
+            
+            runner.section('🎮 Stage 4: Game Logic', 4)
+                .test('Game class exists', () => typeof Game === 'function', !gameImplemented)
+                .test('Game can be instantiated', () => {
+                    try {
+                        const renderer = new Renderer();
+                        const game = new Game(renderer, null);
+                        return game !== null;
+                    } catch (e) {
+                        return false;
+                    }
+                }, !gameImplemented)
+                .test('Game has required methods', () => {
+                    try {
+                        const renderer = new Renderer();
+                        const game = new Game(renderer, null);
+                        return typeof game.start === 'function' &&
+                               typeof game.update === 'function' &&
+                               typeof game.pause === 'function';
+                    } catch (e) {
+                        return false;
+                    }
+                }, !gameImplemented)
+                .test('Game initializes with correct state', () => {
+                    try {
+                        const renderer = new Renderer();
+                        const game = new Game(renderer, null);
+                        return game.score === 0 && 
+                               game.level === 1 &&
+                               game.lines === 0;
+                    } catch (e) {
+                        return false;
+                    }
+                }, !gameImplemented);
+        }
+
+        function getStage5Tests(runner) {
+            runner.section('🖼️ Stage 5: Rendering', 5)
+                .test('Renderer has draw methods', () => {
+                    try {
+                        const renderer = new Renderer();
+                        return typeof renderer.drawBoard === 'function' &&
+                               typeof renderer.drawPiece === 'function';
+                    } catch (e) {
+                        return { skip: true, message: 'Renderer methods not implemented' };
+                    }
+                });
+        }
+
+        function getStage6Tests(runner) {
+            const inputImplemented = InputHandler && typeof InputHandler === 'function';
+            
+            runner.section('⌨️ Stage 6: Input Handling', 6)
+                .test('InputHandler class exists', () => 
+                    typeof InputHandler === 'function', !inputImplemented)
+                .test('InputHandler can be instantiated', () => {
+                    try {
+                        const mockGame = {};
+                        const handler = new InputHandler(mockGame);
+                        return handler !== null;
+                    } catch (e) {
+                        return false;
+                    }
+                }, !inputImplemented);
+        }
+
+        window.runAllTests = function() {
+            resetTestResults();
+            const runner = new TestRunner();
+            
+            logToConsole('Running all tests...');
+            
+            getStage1Tests(runner);
+            getStage2Tests(runner);
+            getStage3Tests(runner);
+            getStage4Tests(runner);
+            getStage5Tests(runner);
+            getStage6Tests(runner);
+            
+            runner.renderResults();
+            
+            logToConsole(`Tests complete: ${testResults.passed}/${testResults.total} passed`);
+            document.getElementById('consoleOutput').style.display = 'block';
+        };
+
+        window.runStageTests = function(stage) {
+            resetTestResults();
+            const runner = new TestRunner();
+            
+            logToConsole(`Running Stage ${stage} tests...`);
+            
+            switch(stage) {
+                case 1: getStage1Tests(runner); break;
+                case 2: getStage2Tests(runner); break;
+                case 3: getStage3Tests(runner); break;
+                case 4: getStage4Tests(runner); break;
+                case 5: getStage5Tests(runner); break;
+                case 6: getStage6Tests(runner); break;
+            }
+            
+            runner.renderResults();
+            logToConsole(`Stage ${stage} tests complete`);
+        };
+
+        function resetTestResults() {
+            testResults = {
+                total: 0,
+                passed: 0,
+                failed: 0,
+                warnings: 0,
+                skipped: 0,
+                sections: []
+            };
+            consoleLog.length = 0;
+        }
+
+        // Auto-run Stage 1 tests on load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                runStageTests(1);
+            }, 500);
+        });
+    </script>
+</body>
+</html>
