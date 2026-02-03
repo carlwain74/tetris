@@ -2,6 +2,44 @@
 
 ## Recent Updates
 
+### ✅ Stage 3: Board Management Complete (Feb 3, 2026)
+
+**Implemented:**
+- Complete Board class with grid management
+- Collision detection system:
+  - Boundary checking (left, right, bottom)
+  - Piece-to-piece collision
+  - Support for pieces spawning above board
+- Line clearing mechanics:
+  - Single and multiple line clears
+  - Gravity (blocks fall after clear)
+  - Complete line detection
+- Game over detection
+- Utility methods:
+  - `getDropDistance()` - Calculate hard drop/ghost piece
+  - `getColumnHeight()` - Stack height per column
+  - `getCell()/setCell()` - Grid manipulation
+  - `getFilledCellCount()` - Count blocks
+  - `isEmpty()` - Check if board is empty
+- Complete test suite (30 tests, all passing)
+
+**Files Modified:**
+- `js/board.js` - Complete implementation
+- `package.json` - Version 1.1.0, added test:stage3 and demo:board scripts
+
+**New Files:**
+- `tests/verify-stage3.js` - 30 comprehensive tests
+- `tests/demo-board.js` - Visual demonstrations
+
+**Testing:**
+```bash
+# Run Stage 3 verification
+npm run test:stage3
+
+# Visual board demo
+npm run demo:board
+```
+
 ### ✅ Stage 2: Piece Definitions Complete (Feb 1, 2026)
 
 **Implemented:**
@@ -93,7 +131,14 @@ ls -la assets/sounds/
 
 ## Version History
 
-### v1.0.2 (Current)
+### v1.1.0 (Current)
+- ✅ Stage 3: Board management complete
+- ✅ Collision detection system
+- ✅ Line clearing with gravity
+- ✅ Game over detection
+- ✅ 30 comprehensive tests passing
+
+### v1.0.2
 - ✅ Stage 2: Piece definitions complete
 - ✅ All 7 tetrominoes with rotations
 - ✅ 7-bag randomizer implemented
