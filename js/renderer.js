@@ -409,5 +409,3 @@ export class Renderer {
         );
     }
 }
-
-}
