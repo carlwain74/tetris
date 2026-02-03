@@ -1,5 +1,37 @@
 # Tetris Game - Updates & Fixes
 
+## Recent Updates
+
+### ✅ Stage 2: Piece Definitions Complete (Feb 1, 2026)
+
+**Implemented:**
+- All 7 tetromino pieces (I, O, T, S, Z, J, L)
+- 4 rotation states per piece using 4x4 grids
+- Piece class with full functionality:
+  - `getShape()` - Returns current rotation matrix
+  - `getColor()` - Returns piece color
+  - `rotate(direction)` - Rotate clockwise/counter-clockwise
+  - `move(dx)` - Move horizontally
+  - `moveDown()` - Move down one row
+  - `clone()` - Create independent copy (for ghost piece)
+  - `reset()` - Return to spawn position
+- 7-bag randomizer for fair piece generation
+- Complete test suite (24 tests, all passing)
+
+**Files Modified:**
+- `js/pieces.js` - Complete implementation
+- `tests/verify-stage2.js` - Comprehensive test suite
+- `tests/demo-pieces.js` - Visual piece demonstration
+
+**Testing:**
+```bash
+# Run Stage 2 verification
+node tests/verify-stage2.js
+
+# Visual piece demo
+node tests/demo-pieces.js
+```
+
 ## Recent Fixes
 
 ### ✅ Fixed: Navigator Property Error (Feb 1, 2026)
@@ -61,7 +93,13 @@ ls -la assets/sounds/
 
 ## Version History
 
-### v1.0.1 (Current)
+### v1.0.2 (Current)
+- ✅ Stage 2: Piece definitions complete
+- ✅ All 7 tetrominoes with rotations
+- ✅ 7-bag randomizer implemented
+- ✅ 24 comprehensive tests passing
+
+### v1.0.1
 - ✅ Fixed navigator property error in test suite
 - ✅ Fixed assets directory structure
 - ✅ Added verification script

@@ -2,13 +2,19 @@
 
 ## 🚀 Quick Start
 
+**IMPORTANT: Run all commands from the tetris-game project root directory**
+
 ```bash
+# Navigate to project directory first
+cd tetris-game
+
 # First time setup
 npm install
 
 # Run tests (choose one)
 npm test                    # Command line (all tests)
 npm run test:browser        # Browser (interactive)
+npm run test:stage2         # Stage 2 only
 ```
 
 ## 📋 Available Commands

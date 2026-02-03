@@ -241,6 +241,23 @@ npm test
 
 ## Troubleshooting
 
+### "Cannot find module" Error
+
+**Problem:** Running commands from wrong directory
+
+**Solution:**
+```bash
+# Make sure you're in the tetris-game directory
+pwd
+# Should show: /path/to/tetris-game
+
+# If not, navigate there:
+cd /path/to/tetris-game
+
+# Then run tests:
+npm test
+```
+
 ### "Cannot find module 'jsdom'"
 
 **Problem:** Dependencies not installed
