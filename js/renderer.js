@@ -325,7 +325,7 @@ export class Renderer {
         }
         
         // Show "New High Score!" message if applicable
-        const highScoreMessage = this.gameOverScreen?.querySelector('.high-score-message');
+        const highScoreMessage = this.gameOverScreen?.querySelector('.high-score-notice');
         if (highScoreMessage) {
             highScoreMessage.style.display = isHighScore ? 'block' : 'none';
         }
