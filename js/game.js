@@ -57,6 +57,7 @@ export class Game {
         this.paused = false;
         this.dropInterval = CONFIG.INITIAL_SPEED;
         this.lockDelay = 0;
+        this.isNewHighScore = false; // Reset high score flag
         
         // Generate initial next pieces
         this.nextPieces = [];

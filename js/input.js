@@ -62,6 +62,11 @@ export class InputHandler {
     handleKeyDown(event) {
         const key = event.code || event.key; // Use code first, fallback to key
         
+        // Don't handle any input during game over - let main.js handle restart
+        if (this.game.gameOver) {
+            return;
+        }
+        
         // Prevent default for game keys
         if (this.isGameKey(key)) {
             event.preventDefault();
@@ -113,12 +118,6 @@ export class InputHandler {
         } 
         else if (this.isKeyInArray(key, KEYS.PAUSE)) {
             this.game.pause();
-        } 
-        else if (this.isKeyInArray(key, KEYS.RESTART)) {
-            if (this.game.gameOver) {
-                this.game.reset();
-                this.game.start();
-            }
         }
     }
     
