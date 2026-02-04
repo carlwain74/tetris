@@ -41,6 +41,7 @@ export class Game {
         
         // High score
         this.highScore = this.loadHighScore();
+        this.isNewHighScore = false;
     }
     
     /**
@@ -371,15 +372,24 @@ export class Game {
     /**
      * End the game
      */
+    /**
+     * End the game
+     */
     endGame() {
         this.gameOver = true;
         this.started = false;
         
-        // Update high score
-        if (this.score > this.highScore) {
+        // Check if this is a new high score BEFORE updating
+        const isNewHighScore = this.score > this.highScore;
+        
+        // Update high score if needed
+        if (isNewHighScore) {
             this.highScore = this.score;
             this.saveHighScore();
         }
+        
+        // Store whether this was a new high score for display
+        this.isNewHighScore = isNewHighScore;
         
         // Cancel animation frame
         if (this.animationId) {

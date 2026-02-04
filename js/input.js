@@ -8,7 +8,6 @@ import { KEYS, CONFIG } from './config.js';
  */
 export class InputHandler {
     constructor(game) {
-        console.log("Start of InputHandler constructor")
         this.game = game;
         this.keysPressed = new Set();
         

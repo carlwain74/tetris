@@ -52,11 +52,15 @@ class TetrisApp {
             cancelAnimationFrame(this.animationId);
         }
         
+        // Remove old game over listener if exists
+        if (this.gameOverListener) {
+            document.removeEventListener('keydown', this.gameOverListener);
+            this.gameOverListener = null;
+        }
+        
         // Create new game components
         this.game = new Game(this.renderer, null);
-        console.log("Before InputHandler is called")
         this.inputHandler = new InputHandler(this.game);
-        console.log("After InputHandler is called")
         this.game.inputHandler = this.inputHandler;
         
         // Set up controls
@@ -114,8 +118,7 @@ class TetrisApp {
                 
                 // Show game over screen if game over
                 if (this.game.gameOver) {
-                    const isHighScore = this.game.score === this.game.highScore && this.game.score > 0;
-                    this.renderer.showGameOverScreen(this.game.score, isHighScore);
+                    this.renderer.showGameOverScreen(this.game.score, this.game.isNewHighScore || false);
                     return; // Stop render loop
                 }
             }
@@ -131,13 +134,18 @@ class TetrisApp {
             if (this.game && this.game.gameOver) {
                 if (event.key === 'r' || event.key === 'R' || event.key === 'Enter') {
                     event.preventDefault();
+                    // Remove this specific listener
                     document.removeEventListener('keydown', restartOnGameOver);
+                    // Hide game over screen
                     this.renderer.hideGameOverScreen();
+                    // Start new game
                     this.startNewGame();
                 }
             }
         };
         
+        // Store reference to remove later if needed
+        this.gameOverListener = restartOnGameOver;
         document.addEventListener('keydown', restartOnGameOver);
     }
 }
